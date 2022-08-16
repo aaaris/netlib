@@ -2,35 +2,59 @@
   <div class="register_container">
     <div class="register_box">
       <!-- 头像区域 -->
-      <div class="avatar_box">
+      <!-- <div class="avatar_box">
         <a href="/">
           <img src="../assets/logo.png" alt="logo.png" />
         </a>
-      </div>
+      </div> -->
       <!-- logo名字 -->
       <div class="logo_name">
-        <span>NetLib</span>
+        <img src="../assets/logo.png" alt="" />
+        <!-- <span>NetLib</span> -->
       </div>
       <!-- 注册表单区域 -->
-      <el-form ref="registerFormRef" :model="registerForm" :rules="registerFormRules" status-icon class="register_form">
+      <el-form
+        ref="registerFormRef"
+        :model="registerForm"
+        :rules="registerFormRules"
+        status-icon
+        class="register_form"
+      >
         <!-- username -->
         <el-form-item prop="username">
-          <el-input v-model="registerForm.username" prefix-icon="el-icon-user-solid" placeholder="username"></el-input>
+          <el-input
+            v-model="registerForm.username"
+            prefix-icon="el-icon-user-solid"
+            placeholder="username"
+          ></el-input>
         </el-form-item>
         <!-- password -->
         <el-form-item prop="password">
-          <el-input type="password" v-model="registerForm.password" prefix-icon="el-icon-lock" placeholder="password">
+          <el-input
+            type="password"
+            v-model="registerForm.password"
+            prefix-icon="el-icon-lock"
+            placeholder="password"
+          >
           </el-input>
         </el-form-item>
         <!-- 确认密码 -->
         <el-form-item prop="checkPw">
-          <el-input type="password" prefix-icon="el-icon-lock" v-model="registerForm.checkPw"
-            placeholder="check password"></el-input>
+          <el-input
+            type="password"
+            prefix-icon="el-icon-lock"
+            v-model="registerForm.checkPw"
+            placeholder="check password"
+          ></el-input>
         </el-form-item>
         <!-- 按钮 -->
         <el-form-item class="btns">
-          <el-button type="primary" @click="register('registerFormRef')">注册</el-button>
-          <el-button type="info" @click="resetregisterForm('registerFormRef')">重置</el-button>
+          <el-button type="primary" @click="register('registerFormRef')"
+            >注册</el-button
+          >
+          <el-button type="info" @click="resetregisterForm('registerFormRef')"
+            >重置</el-button
+          >
         </el-form-item>
       </el-form>
     </div>
@@ -95,19 +119,18 @@ export default {
         if (!valid) return;
         const { data: res } = await this.$http({
           method: "post",
-          url:
-            "/user",
+          url: "/user",
           data: {
             user_name: this.registerForm.username,
-            user_password: this.registerForm.password
-          }
+            user_password: this.registerForm.password,
+          },
         });
         // console.log(res)
         this.$message({
           showClose: true,
           duration: 0,
           type: "success",
-          message: "注册成功！您的账号:" + res.data.user_id
+          message: "注册成功！您的账号:" + res.data.user_id,
         });
         this.$router.push("/login");
       });
@@ -128,9 +151,9 @@ export default {
 }
 
 .register_box {
-  width: 450px;
-  height: 300px;
-  background-color: #fff;
+  width: 500px;
+  height: 400px;
+  background-color: rgba(255, 255, 255, 0.95);
   border-radius: 3px;
   position: absolute;
   left: 50%;
@@ -163,6 +186,9 @@ export default {
   font-weight: bold;
   text-align: center;
   margin: 5px;
+  img {
+    height: 100px;
+  }
 }
 
 .register_form {

@@ -2,51 +2,64 @@
   <el-container class="page-body">
     <!-- 头部 -->
     <el-header class="page-header">
-      <div class="user-container">
-        <!-- 用户 -->
-        <a href="#/user" class="userlink">
-          <i class="el-icon-user"></i>
-        </a>
-      </div>
+      <el-row type="flex" align="middle">
+        <el-col :span="12" style="text-align: left">
+          <a href="javascript:;" class="userlink">首页</a>
+        </el-col>
+        <el-col :span="12" style="text-align: right">
+          <a :href="this.isLogin ? `#/user` : `#/login`" class="userlink">
+            <i class="el-icon-user"
+              >&nbsp;{{ this.isLogin ? "欢迎登录" : "游客 去登陆" }}</i
+            >
+          </a>
+          <!-- </div> -->
+        </el-col>
+      </el-row>
     </el-header>
     <!-- 书本显示主体 -->
     <el-container class="main-container">
       <!-- logo -->
-      <el-header class="logo-container">
-        <a href="#/home" class="logo-text">NetLib</a>
+      <el-header class="logo-container" height="150px">
+        <!-- <a href="#/home" class="logo-text"> -->
+        <img src="../assets/logo.png" alt="" />
+        <!-- </a> -->
       </el-header>
       <!-- 搜索框 -->
-      <div style="margin: 15px auto; width: 600px">
-        <el-input
-          placeholder="请输入查找内容"
-          v-model="searchText"
-          class="input-with-select"
-        >
-          <el-select v-model="select" slot="prepend" placeholder="请选择类别">
-            <el-option label="类型" value="class_name"></el-option>
-            <el-option label="书名" value="book_name"></el-option>
-            <el-option label="作者" value="book_author"></el-option>
-            <el-option label="出版社" value="book_addr"></el-option>
-            <el-option label="描述信息" value="book_info"></el-option>
-          </el-select>
-          <el-button
-            type="primer"
-            slot="append"
-            icon="el-icon-search"
-            @click="searchBookItem"
-          ></el-button>
-        </el-input>
-      </div>
-
-      <!--书本表格主体部分-->
-      <div class="divider">
-        <h1>最受欢迎的</h1>
-        <el-divider></el-divider>
-      </div>
-      <!-- 书本信息表格 -->
+      <el-autocomplete
+        placeholder="请输入查找内容"
+        v-model="searchText"
+        class="input-with-select"
+        :fetch-suggestions="querySearch"
+        :trigger-on-focus="false"
+        @select="handleSelect"
+      >
+        <el-select v-model="select" slot="prepend" placeholder="请选择类别">
+          <el-option label="类型" value="class_name"></el-option>
+          <el-option label="书名" value="book_name"></el-option>
+          <el-option label="作者" value="book_author"></el-option>
+          <el-option label="出版社" value="book_addr"></el-option>
+          <el-option label="描述信息" value="book_info"></el-option>
+        </el-select>
+        <template slot-scope="{ item }">
+          {{ item }}
+        </template>
+        <el-button
+          type="primer"
+          slot="append"
+          icon="el-icon-search"
+          @click="searchBookItem"
+        ></el-button>
+      </el-autocomplete>
+      <!-- 显示书本部分 -->
       <el-main>
+        <!--书本表格主体部分-->
+        <div class="divider">
+          <h1>最受欢迎的</h1>
+          <el-divider></el-divider>
+        </div>
+        <!-- 书本信息表格 -->
         <!-- 信息部分 -->
-        <el-table :data="tableData">
+        <el-table :data="tableData" height="650px">
           <el-table-column
             prop="class_name"
             align="center"
@@ -146,6 +159,16 @@
         </el-dialog>
       </el-main>
     </el-container>
+    <el-footer style="font-size:18px line-height:20px">
+      <el-row type="flex" justify="center" align="middle">
+        <el-col :span="12"
+          ><span
+            >本网站图书资源来源于<a href="https://book.douban.com">豆瓣</a
+            >，如有侵权行为，请联系邮箱2997600742@qq.com</span
+          ></el-col
+        >
+      </el-row>
+    </el-footer>
   </el-container>
 </template>
 
@@ -153,9 +176,10 @@
 export default {
   data() {
     return {
-      // 客户端存储用户名和账号名
-      username: "",
-      accoutnum: 0,
+      // 登录状态
+      isLogin: false,
+      // 查询建议
+      suggestionArray: [],
       // 查询排行榜表单数据
       tableData: [],
       searchText: "",
@@ -173,8 +197,35 @@ export default {
       this.tableData = res.data;
     };
     getBooks();
+    this.isLogin = window.sessionStorage.getItem("token") != null;
   },
   methods: {
+    handleSelect(item) {
+      if (this.select == "") {
+        this.select = "book_name";
+      }
+      this.searchText = item;
+    },
+    // 获取搜索建议
+    querySearch(queryString, cb) {
+      // console.log(str)
+      // 发送后台请求获取搜索建议
+      let getSuggestion = async () => {
+        const { data: res } = await this.$http({
+          method: "get",
+          url:
+            "/book/suggestion?queryKey=" +
+            (this.select != "" ? this.select : "book_name") +
+            "&queryVal=" +
+            queryString,
+        });
+        console.log(res.data);
+        // 调用callback返回建议的数据
+        cb(res.data);
+      };
+      getSuggestion();
+    },
+
     // 寻找书本
     searchBookItem() {
       if (this.select === "") {
@@ -195,6 +246,18 @@ export default {
         }
       };
       sbi();
+    },
+    gotoUesr() {
+      // 检验用户登录
+      if (window.sessionStorage.getItem("token") === null) {
+        return this.$confirm("请先登录！", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "返回",
+          type: "warning",
+        }).then(() => {
+          this.$router.push("/login");
+        });
+      }
     },
     // 下载书本
     downloadBookItem(index, row) {
@@ -273,57 +336,58 @@ export default {
 <style lang="less" scoped>
 // 主页容器
 .page-body {
-  height: 100%;
+  height: 1500px;
   width: 100%;
-  // background-image: url("../assets/home_bg.webp");
-  // background-size: 100% 100%;
+  background-color: #f2f2f2;
+}
+
+// 行内元素垂直居中
+.el-row {
+  height: 100%;
 }
 
 // 头部设置
 .page-header {
-  text-align: right;
-  font-size: 20px;
-  // background-color: wheat;
-  // background-color: yellow;
+  font-size: 18px;
+  line-height: 20px;
+  background-color: rgb(71, 70, 70);
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
 }
 
 //用户容器样式
-.user-container {
-  margin: 10px;
-
-  a {
-    text-decoration: none;
+.userlink {
+  color: #f2f2f2;
+  text-decoration: none;
+  :hover {
+    color: #49afd0;
+    text-decoration: underline;
   }
 }
 
 // 内容容器
 .main-container {
-  width: 1000px;
+  width: 70%;
   line-height: 30px;
-  margin: 0px auto;
+  margin: 20px auto;
   background-color: white;
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
 }
 
 // logo样式
 .logo-container {
   text-align: center;
-  margin: 30px;
-
-  .logo-text {
-    font-size: 50px;
-    text-decoration: none;
-    font-family: "Courier New", Courier, monospace;
-    color: #333;
+  margin: 10px auto;
+  img {
+    height: 100%;
   }
 }
 
 //搜索框样式
-.header {
-  // background-color: red;
-  color: #333;
-  line-height: 60px;
+.input-with-select {
+  margin: 30px auto;
+  width: 70%;
+  // height: 10%;
 }
-
 // 搜索框选择列表样式
 .el-input {
   .el-select {
@@ -336,7 +400,6 @@ export default {
   margin-top: 25px;
   color: #49afd0;
   font-size: 16pt;
-
   // 分割线容器
   .el-divider {
     background-color: #49afd0;

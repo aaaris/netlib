@@ -231,11 +231,7 @@ export default {
     };
   },
   created() {
-    // 检验用户登录
-    if (window.sessionStorage.getItem("token") === null) {
-      this.$router.push("/login");
-      return this.$message.error("请先登录！");
-    }
+    
     let getUser = async () => {
       const { data: res } = await this.$http.get(
         "/user/" +

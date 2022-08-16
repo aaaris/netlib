@@ -2,24 +2,38 @@
   <div class="login_container">
     <div class="login_box">
       <!-- 头像区域 -->
-      <div class="avatar_box">
+      <!-- <div class="avatar_box">
         <a href="/">
           <img src="../assets/logo.png" alt="logo.png" />
         </a>
-      </div>
+      </div> -->
       <div class="logo_name">
-        <span>NetLib</span>
+        <img class="logo_img" src="../assets/logo.png" alt="" />
       </div>
       <!-- 登录表单区域 -->
-      <el-form ref="loginFormRef" :model="loginForm" :rules="loginFormRules" class="login_form">
+      <el-form
+        ref="loginFormRef"
+        :model="loginForm"
+        :rules="loginFormRules"
+        class="login_form"
+      >
         <!-- accout -->
         <el-form-item prop="userAccount">
-          <el-input v-model="loginForm.userAccount" prefix-icon="el-icon-user-solid" placeholder="user accout">
+          <el-input
+            v-model="loginForm.userAccount"
+            prefix-icon="el-icon-user-solid"
+            placeholder="user accout"
+          >
           </el-input>
         </el-form-item>
         <!-- password -->
         <el-form-item prop="password">
-          <el-input type="password" v-model="loginForm.password" prefix-icon="el-icon-lock" placeholder="password">
+          <el-input
+            type="password"
+            v-model="loginForm.password"
+            prefix-icon="el-icon-lock"
+            placeholder="password"
+          >
           </el-input>
         </el-form-item>
         <a class="a_register" href="/#/register">没有账号？点击注册</a>
@@ -71,21 +85,25 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
-        var targetURL = "?userid=" +
-          this.loginForm.userAccount + "&password=" + this.loginForm.password;
+        var targetURL =
+          "?userid=" +
+          this.loginForm.userAccount +
+          "&password=" +
+          this.loginForm.password;
         const { data: res } = await this.$http({
           method: "get",
-          url: "/user" + targetURL, 
-        }); 
-        if (res.code != 200) return this.$message.error("登录失败! " + res.data);
+          url: "/user" + targetURL,
+        });
+        if (res.code != 200)
+          return this.$message.error("登录失败! " + res.data);
         this.$message.success({
           message: "登录成功",
         });
         //将登录成功之后的token，保存到客户端的sessionStorage中
-        window.sessionStorage.setItem("token", res.data.access_token)
+        window.sessionStorage.setItem("token", res.data.access_token);
         window.sessionStorage.setItem("id", this.loginForm.userAccount);
         // console.log(window.sessionStorage.length)
-        // 跳转到后台主页  
+        // 跳转到后台主页
         this.$router.push("/home");
       });
     },
@@ -105,9 +123,9 @@ export default {
 }
 
 .login_box {
-  width: 450px;
-  height: 300px;
-  background-color: #fff;
+  width: 500px;
+  height: 400px;
+  background-color:rgba(255, 255, 255, 0.95);
   border-radius: 3px;
   position: absolute;
   left: 50%;
@@ -136,18 +154,22 @@ export default {
 .logo_name {
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
-  margin: 20px;
+  margin-top: 20px;
   text-align: center;
   font-size: 30px;
+  .logo_img {
+    height: 100px;
+  }
+  // background-color: #2b4b6b;
 }
 
 .login_form {
-  position: absolute;
   bottom: 0;
   width: 100%;
-  padding: 0 20px;
+  padding: 28px 20px;
   box-sizing: border-box;
 }
+
 
 .a_register {
   text-decoration: none;
