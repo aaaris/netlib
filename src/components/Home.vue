@@ -1,28 +1,12 @@
 <template>
-  <el-container class="page-body">
+  <div class="page-body">
     <!-- 头部 -->
-    <el-header class="page-header">
-      <el-row type="flex" align="middle">
-        <el-col :span="12" style="text-align: left">
-          <a href="javascript:;" class="userlink">首页</a>
-        </el-col>
-        <el-col :span="12" style="text-align: right">
-          <a :href="this.isLogin ? `#/user` : `#/login`" class="userlink">
-            <i class="el-icon-user"
-              >&nbsp;{{ this.isLogin ? "欢迎登录" : "游客 去登陆" }}</i
-            >
-          </a>
-          <!-- </div> -->
-        </el-col>
-      </el-row>
-    </el-header>
+    <Header></Header>
     <!-- 书本显示主体 -->
     <el-container class="main-container">
       <!-- logo -->
       <el-header class="logo-container" height="150px">
-        <!-- <a href="#/home" class="logo-text"> -->
-        <img src="../assets/logo.png" alt="" />
-        <!-- </a> -->
+        <a href="javascript:;"><img src="../../public/logo.png" alt="" /> </a>
       </el-header>
       <!-- 搜索框 -->
       <el-autocomplete
@@ -54,7 +38,7 @@
       <el-main>
         <!--书本表格主体部分-->
         <div class="divider">
-          <h1>最受欢迎的</h1>
+          <h1>&nbsp;&nbsp;&nbsp;最受欢迎的</h1>
           <el-divider></el-divider>
         </div>
         <!-- 书本信息表格 -->
@@ -81,8 +65,6 @@
             width="200px"
           >
           </el-table-column>
-          <!-- <el-table-column prop="book_dl_count" align="center" label="下载量" width="130px">
-          </el-table-column> -->
           <el-table-column
             prop="book_info"
             align="center"
@@ -159,21 +141,15 @@
         </el-dialog>
       </el-main>
     </el-container>
-    <el-footer style="font-size:18px line-height:20px">
-      <el-row type="flex" justify="center" align="middle">
-        <el-col :span="12"
-          ><span
-            >本网站图书资源来源于<a href="https://book.douban.com">豆瓣</a
-            >，如有侵权行为，请联系邮箱2997600742@qq.com</span
-          ></el-col
-        >
-      </el-row>
-    </el-footer>
-  </el-container>
+    <Footer></Footer>
+  </div>
 </template>
 
 <script>
+import Footer from "./Footer.vue";
+import Header from "./Header.vue";
 export default {
+  components: { Footer, Header },
   data() {
     return {
       // 登录状态
@@ -334,39 +310,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-// 主页容器
-.page-body {
-  height: 1500px;
-  width: 100%;
-  background-color: #f2f2f2;
-}
-
-// 行内元素垂直居中
-.el-row {
-  height: 100%;
-}
-
-// 头部设置
-.page-header {
-  font-size: 18px;
-  line-height: 20px;
-  background-color: rgb(71, 70, 70);
-  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
-}
-
-//用户容器样式
-.userlink {
-  color: #f2f2f2;
-  text-decoration: none;
-  :hover {
-    color: #49afd0;
-    text-decoration: underline;
-  }
-}
-
 // 内容容器
 .main-container {
-  width: 70%;
+  width: 75%;
   line-height: 30px;
   margin: 20px auto;
   background-color: white;
@@ -376,7 +322,7 @@ export default {
 // logo样式
 .logo-container {
   text-align: center;
-  margin: 10px auto;
+  margin: 30px auto;
   img {
     height: 100%;
   }

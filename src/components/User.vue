@@ -1,17 +1,22 @@
 <template>
   <el-container class="page-container">
     <!-- 网页头部 -->
-    <el-header>
-      <el-page-header class="page-header" @back="goBack" content="个人主页">
-      </el-page-header>
+    <el-header class="page-header">
+      <el-row type="flex" align="middle">
+        <el-col :span="6">
+          <a href="#/home" class="userlink">返回</a>
+          <el-divider direction="vertical"></el-divider>
+          <span>个人主页</span>
+        </el-col>
+      </el-row>
     </el-header>
     <!-- 网页主体 -->
-    <el-container>
+    <el-container class="page-main-container">
       <!-- 侧边栏 -->
       <el-aside class="user-tabs-container">
         <!-- 用户头像 -->
         <div class="user-avatar-container">
-          <img src="../assets/avatar.png" />
+          <img src="../assets/user/default.png" />
         </div>
         <!-- 用户信息 -->
         <div class="userItem">
@@ -81,7 +86,7 @@
         </el-dialog>
       </el-aside>
       <!-- 用户行为主体 -->
-      <el-main class="page-main-contain">
+      <el-main class="user-main-contain">
         <el-tabs tab-position="top">
           <!-- 用户收藏 -->
           <el-tab-pane label="我的收藏">
@@ -231,7 +236,6 @@ export default {
     };
   },
   created() {
-    
     let getUser = async () => {
       const { data: res } = await this.$http.get(
         "/user/" +
@@ -346,23 +350,43 @@ export default {
 </script>
 
 <style lang="less" scoped>
-//主体容器
-.page-container {
-  line-height: 30px;
+//页头容器
+.page-header {
+  font-size: 18px;
+  line-height: 20px;
+  background-color: rgb(71, 70, 70);
+  color: #f7f7f7;
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
+  // 行垂直居中
+  .el-row {
+    height: 100%;
+  }
+  // 超链接
+  .userlink {
+    color: #f2f2f2;
+    text-decoration: none;
+  }
+  .userlink:hover {
+    color: #49afd0;
+    text-decoration: underline;
+  }
 }
 
-//页头容器
-// .el-page-header {
-// }
+// 网页主体容器
+.page-main-container {
+  margin: 50px;
+  height: 1000px;
+  background-color: white;
+}
 
 // 侧边标签栏
 .user-tabs-container {
   width: 300px;
   text-align: center;
-
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
   // 头像容器
   .user-avatar-container {
-    margin: 10px auto;
+    margin: 50px auto;
   }
 
   // 个人信息
@@ -374,5 +398,10 @@ export default {
   .page-main-contain {
     width: 800px;
   }
+}
+
+// 用户主体区域容器
+.user-main-contain {
+  box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
 }
 </style>
