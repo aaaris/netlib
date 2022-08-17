@@ -6,12 +6,18 @@
           <a href="/home" class="userlink">NETLIB</a>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <a :href="this.isLogin ? `#/user` : `#/login`" class="userlink">
+          <a :href="this.isLogin ? `/index` : `/login`" class="userlink">
             <i class="el-icon-user"></i>&nbsp;{{
-              this.isLogin ? "欢迎" : "游客 去登陆"
+              this.isLogin
+                ? "欢迎" + this.$store.state.userinfo.user_name
+                : "游客 去登陆"
             }}
           </a>
-          <a href="/logout" class="userlink" v-if="this.isLogin == true"
+          <a
+            href="/home"
+            class="userlink"
+            v-if="this.isLogin == true"
+            @click="logout"
             >退出</a
           >
         </el-col>
@@ -22,9 +28,20 @@
 <script>
 export default {
   data() {
-    return {
-      isLogin: false,
-    };
+    return {};
+  },
+  computed: {
+    isLogin: {
+      get() {
+        return this.$store.getters.getLoginState;
+      },
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.state.token = "";
+      this.$store.mutations.clearState;
+    },
   },
 };
 </script>
@@ -44,9 +61,9 @@ export default {
 .userlink {
   color: #f2f2f2;
   text-decoration: none;
-  :hover {
-    color: #49afd0;
-    text-decoration: underline;
-  }
+}
+.userlink:hover {
+  color: #49afd0;
+  text-decoration: underline;
 }
 </style>

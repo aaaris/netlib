@@ -35,69 +35,16 @@
 export default {
   name: "Aside",
   data() {
-    return {
-      menu_data: [
-        {
-          name: "USER",
-          icon: "el-icon-user",
-          child: [
-            {
-              name: "个人信息",
-              icon: "el-icon-document",
-              path: "/index/profile",
-            },
-            {
-              name: "我的收藏",
-              icon: "el-icon-collection",
-              path: "/index/collection",
-            },
-            {
-              name: "我的分享",
-              icon: "el-icon-share",
-              path: "/index/share",
-            },
-          ],
-        },
-        {
-          name: "DATA&TABLE",
-          icon: "el-icon-s-data",
-          child: [
-            {
-              name: "用户管理",
-              icon: "el-icon-user-solid",
-              path: "/index/userManager",
-            },
-            {
-              name: "书本管理",
-              icon: "el-icon-reading",
-              path: "/index/bookManager",
-            },
-          ],
-        },
-        {
-          name: "MORE",
-          icon: "el-icon-more",
-          child: [
-            {
-              name: "联系我们",
-              icon: "el-icon-chat-dot-square",
-              path: "index/contact",
-            },
-            {
-              name: "小程序服务",
-              icon: "el-icon-mobile",
-              path: "index/more",
-            },
-          ],
-        },
-      ],
-    };
+    return {};
   },
-  methods: {
-    logout() {
-      console.log("logout");
+  computed: {
+    menu_data: {
+      get() {
+        return this.$store.state.menu_data;
+      },
     },
   },
+  methods: {},
 };
 </script>
 

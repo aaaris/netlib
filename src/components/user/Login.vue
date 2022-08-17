@@ -13,9 +13,9 @@
         class="login_form"
       >
         <!-- accout -->
-        <el-form-item prop="userAccount">
+        <el-form-item prop="userId">
           <el-input
-            v-model="loginForm.userAccount"
+            v-model="loginForm.userId"
             prefix-icon="el-icon-user-solid"
             placeholder="user accout"
           >
@@ -31,7 +31,7 @@
           >
           </el-input>
         </el-form-item>
-        <a class="a_register" href="#/regist">没有账号？点击注册</a>
+        <a class="a_register" href="/regist">没有账号？点击注册</a>
         <!-- 按钮 -->
         <el-form-item class="btns">
           <el-button type="primary" @click="login">登录</el-button>
@@ -48,13 +48,13 @@ export default {
     return {
       //登录表单的数据绑定对象
       loginForm: {
-        userAccount: "",
+        userId: "",
         password: "",
       },
       // 表单的验证规则对象
       loginFormRules: {
         //验证用户名是否合法
-        userAccount: [
+        userId: [
           { required: true, message: "请输入登录账号名", trigger: "blur" },
           {
             min: 3,
@@ -82,7 +82,7 @@ export default {
         if (!valid) return;
         var targetURL =
           "?userid=" +
-          this.loginForm.userAccount +
+          this.loginForm.userId +
           "&password=" +
           this.loginForm.password;
         const { data: res } = await this.$http({
@@ -96,8 +96,8 @@ export default {
         });
         //将登录成功之后的token，保存到客户端的sessionStorage中
         window.sessionStorage.setItem("token", res.data.access_token);
-        window.sessionStorage.setItem("id", this.loginForm.userAccount);
-        // console.log(window.sessionStorage.length)
+        window.sessionStorage.setItem("id", this.loginForm.userId);
+        this.$store.commit("setToken", res.data.access_token);
         // 跳转到后台主页
         this.$router.push("/home");
       });
