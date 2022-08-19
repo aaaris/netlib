@@ -98,7 +98,7 @@ export default {
         method: "post",
         url: "/collection?access_token=" + this.$store.getters.getToken,
         data: {
-          user_id: Number(this.$store.userinfo.user_id),
+          user_id: Number(this.$store.state.userinfo.user_id),
           book_id: row.book_id,
         },
       });

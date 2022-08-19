@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div style="display: flex">
     <el-menu
-      background-color="#545c64"
+      background-color="#3f4d67"
       text-color="#ffffff"
       active-text-color="#ffd04b"
       class="el-menu-vertical-demo"
       router
+      :style="showMenu ? `display:block` : `display:none`"
     >
       <el-menu-item index="/home">
         <i class="el-icon-s-home"></i>
@@ -28,6 +29,21 @@
         </el-menu-item>
       </el-submenu>
     </el-menu>
+    <div class="menu-btu">
+      <el-button
+        type="text"
+        :icon="showMenu ? `el-icon-arrow-left` : `el-icon-arrow-right`"
+        style="
+          background-color: rgba(204, 204, 204, 0.7);
+          border-top-right-radius: 100%;
+          border-bottom-right-radius: 100%;
+          width: 30px;
+          height: 70px;
+        "
+        @click="showMenu = !showMenu"
+      >
+      </el-button>
+    </div>
   </div>
 </template>
 
@@ -35,7 +51,9 @@
 export default {
   name: "Aside",
   data() {
-    return {};
+    return {
+      showMenu: true,
+    };
   },
   computed: {
     menu_data: {
@@ -50,7 +68,21 @@ export default {
 
 <style lang="less" scoped>
 .el-menu-vertical-demo {
-  height: 100%;
   width: 300px;
+  box-shadow: 1px 0 20px 0 #3f4d67;
+  height: 100%;
+}
+// 菜单按钮
+.menu-btu {
+  z-index: 1;
+  display: none;
+  margin: auto 0;
+}
+
+// 移动端适配
+@media (max-width: 600px) {
+  .menu-btu {
+    display: block;
+  }
 }
 </style>

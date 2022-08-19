@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunknet_lib"]=self["webpackChunknet_lib"]||[]).push([[90],{17090:(e,t,n)=>{n.r(t),n.d(t,{default:()=>i});var l=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",[e._v("profile")])},r=[];const u={data:function(){return{}}},s=u;var a=n(1001),c=(0,a.Z)(s,l,r,!1,null,"482602b7",null);const i=c.exports}}]);
-//# sourceMappingURL=90.828cf1f6.js.map

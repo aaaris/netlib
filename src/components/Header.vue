@@ -8,7 +8,7 @@
         <el-col :span="12" style="text-align: right">
           <a href="/index" class="userlink">
             <i class="el-icon-user"></i>&nbsp;{{
-              this.isLogin ? "欢迎" : "游客"
+              this.isLogin ? this.$store.state.userinfo.user_name : "游客"
             }}
           </a>
           <a
@@ -36,7 +36,7 @@ export default {
     },
   },
   methods: {
-    logout() { 
+    logout() {
       this.$store.commit("removeStorage");
     },
   },

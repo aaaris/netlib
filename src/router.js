@@ -113,9 +113,9 @@ router.beforeEach((to, from, next) => {
       },
     ];
     // 获取用户角色
-    let userState = store.state.userState;
+    let user_level = store.getters.getUserLevel;
     // 如果用户为管理员则添加数据后台
-    if (userState == 1) {
+    if (user_level == 1) {
       menu_data.splice(1, 0, {
         name: "DATA&TABLE",
         icon: "el-icon-s-data",
@@ -154,8 +154,8 @@ router.beforeEach((to, from, next) => {
           type: "error",
           duration: 1500,
         });
-      }else {
-        
+      } else {
+        next();
       }
     } else {
       next();
@@ -163,7 +163,7 @@ router.beforeEach((to, from, next) => {
   } else {
     // 不需要登陆
     next();
-  } 
+  }
 });
 
 export default router;

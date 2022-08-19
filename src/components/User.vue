@@ -239,7 +239,7 @@ export default {
     let getUser = async () => {
       const { data: res } = await this.$http.get(
         "/user/" +
-          this.$store.userinfo.user_id +
+          this.$store.state.userinfo.user_id +
           "?access_token=" +
           this.$store.getters.getToken
       );
@@ -251,7 +251,7 @@ export default {
     let getCollections = async () => {
       const { data: res } = await this.$http.get(
         "/collection/" +
-          this.$store.userinfo.user_id +
+          this.$store.state.userinfo.user_id +
           "?access_token=" +
           this.$store.getters.getToken
       );

@@ -6,7 +6,7 @@
         prop="class_name"
         align="center"
         label="类型"
-        width="130px"
+        width="200px"
       >
       </el-table-column>
       <el-table-column
@@ -23,22 +23,36 @@
         width="200px"
       >
       </el-table-column>
+      <el-table-column align="center">
+        <template slot="header" slot-scope="scope">
+          <el-input
+            v-model="searchText"
+            size="mini"
+            placeholder="输入关键字搜索"
+          />
+        </template>
+        <template slot-scope="scope">
+          <el-button
+            @click="deleteBookItem(scope.$index, scope.row)"
+            icon="el-icon-star-on"
+            circle
+          ></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 移动端表格 -->
+    <el-table class="tableMobileClass" :data="tableData">
       <el-table-column
-        prop="book_addr"
+        prop="book_name"
         align="center"
-        label="出版社"
-        width="200px"
+        label="名称"
+        width="150px"
       >
       </el-table-column>
-      <el-table-column
-        prop="book_info"
-        align="center"
-        label="描述性息"
-        width="230px"
-        show-overflow-tooltip
-      >
-      </el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center">
+        <template slot="header" slot-scope="scope">
+          <el-input v-model="searchText" size="mini" placeholder="输入关键字搜索" />
+        </template>
         <template slot-scope="scope">
           <el-button
             @click="deleteBookItem(scope.$index, scope.row)"
@@ -58,13 +72,15 @@ export default {
     return {
       // 收藏表格数据
       tableData: [],
+      // 搜索内容
+      searchText: "",
     };
   },
   async created() {
     // 从后端api初始化tableData
     const { data: res } = await this.$http.get(
       "/collection/" +
-        this.$store.userinfo.user_id +
+        this.$store.state.userinfo.user_id +
         "?access_token=" +
         this.$store.getters.getToken
     );
@@ -83,11 +99,9 @@ export default {
         // 向后台发送删除请求
         const { data: res } = await this.$http({
           method: "delete",
-          url:
-            "/collection?access_token=" +
-            this.$store.getters.getToken,
+          url: "/collection?access_token=" + this.$store.getters.getToken,
           data: {
-            user_id: Number(this.$store.userinfo.user_id),
+            user_id: Number(this.$store.state.userinfo.user_id),
             book_id: row.book_id,
           },
         });
@@ -112,4 +126,20 @@ export default {
 };
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.tableClass {
+  width: 100%;
+}
+.tableMobileClass {
+  width: 100%;
+  display: none;
+}
+@media (max-width: 600px) {
+  .tableClass {
+    display: none;
+  }
+  .tableMobileClass {
+    display: block;
+  }
+}
+</style>

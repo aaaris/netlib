@@ -18,7 +18,7 @@ import {
   Table,
   TableColumn,
   Form,
-  FormItem, 
+  FormItem,
   Icon,
   Row,
   Col,
@@ -38,10 +38,14 @@ import {
   Loading,
   MessageBox,
   Message,
+  Empty,
   Notification,
+  Card,
 } from "element-ui";
 
 Vue.use(Pagination);
+Vue.use(Card);
+Vue.use(Empty);
 Vue.use(Dialog);
 Vue.use(Autocomplete);
 Vue.use(Menu);
@@ -59,7 +63,7 @@ Vue.use(ButtonGroup);
 Vue.use(Table);
 Vue.use(TableColumn);
 Vue.use(Form);
-Vue.use(FormItem); 
+Vue.use(FormItem);
 Vue.use(Icon);
 Vue.use(Row);
 Vue.use(Col);
@@ -80,7 +84,7 @@ Vue.use(CascaderPanel);
 Vue.use(Loading.directive);
 
 Vue.prototype.$loading = Loading.service;
-Vue.prototype.$msgbox = MessageBox; 
+Vue.prototype.$msgbox = MessageBox;
 Vue.prototype.$confirm = MessageBox.confirm;
 Vue.prototype.$prompt = MessageBox.prompt;
 Vue.prototype.$notify = Notification;

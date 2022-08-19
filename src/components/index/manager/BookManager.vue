@@ -109,13 +109,6 @@ export default {
     // 从后端api初始化tableData
     const { data: res } = await this.$http.get("/book");
     this.tableData = res.data;
-    if (this.isLogin) {
-      const { data: res } = await this.$http.get(
-        "/book/" + this.$store.state.userinfo.userid
-      );
-      console.log(res);
-      this.$store.state.userinfo = res.data;
-    }
   },
   methods: {
     // 选择搜索建议

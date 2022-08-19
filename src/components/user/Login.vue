@@ -78,6 +78,7 @@ export default {
     login() {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
+        // 发送登录
         var targetURL =
           "?userid=" +
           this.loginForm.userId +
@@ -94,13 +95,17 @@ export default {
         this.$message.success({
           message: "登录成功",
         });
+        // 拉取用户信息
         const { data: res2 } = await this.$http.get(
           "/user/" +
             this.loginForm.userId +
             "?access_token=" +
             res.data.access_token
         );
-        localStorage.setItem("userinfo", JSON.stringify(res2.data));
+        if (res2.code != 200)
+          return this.$message.error("拉取用户信息失败！" + res2.data);
+        // 将用户信息保存到store,localStorage中
+        this.$store.commit("setUserInfo", JSON.stringify(res2.data));
         // 跳转到后台主页
         this.$router.push("/home");
       });
