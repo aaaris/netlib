@@ -6,15 +6,13 @@
           <a href="/home" class="userlink">NETLIB</a>
         </el-col>
         <el-col :span="12" style="text-align: right">
-          <a :href="this.isLogin ? `/index` : `/login`" class="userlink">
+          <a href="/index" class="userlink">
             <i class="el-icon-user"></i>&nbsp;{{
-              this.isLogin
-                ? "欢迎" + this.$store.state.userinfo.user_name
-                : "游客 去登陆"
+              this.isLogin ? "欢迎" : "游客"
             }}
           </a>
           <a
-            href="/home"
+            href="javascript:;"
             class="userlink"
             v-if="this.isLogin == true"
             @click="logout"
@@ -33,14 +31,13 @@ export default {
   computed: {
     isLogin: {
       get() {
-        return this.$store.getters.getLoginState;
+        return this.$store.state.isLogin;
       },
     },
   },
   methods: {
-    logout() {
-      this.$store.state.token = "";
-      this.$store.mutations.clearState;
+    logout() { 
+      this.$store.commit("removeStorage");
     },
   },
 };

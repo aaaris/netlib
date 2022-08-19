@@ -60,18 +60,15 @@ export default {
       tableData: [],
     };
   },
-  created() {
+  async created() {
     // 从后端api初始化tableData
-    let getCollections = async () => {
-      const { data: res } = await this.$http.get(
-        "/collection/" +
-          window.sessionStorage.getItem("id") +
-          "?access_token=" +
-          window.sessionStorage.getItem("token")
-      );
-      this.tableData = res.data;
-    };
-    getCollections();
+    const { data: res } = await this.$http.get(
+      "/collection/" +
+        this.$store.userinfo.user_id +
+        "?access_token=" +
+        this.$store.getters.getToken
+    );
+    this.tableData = res.data;
   },
   methods: {
     // 删除收藏书籍
@@ -81,37 +78,34 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning",
-      }).then(() => {
+      }).then(async () => {
         // 确定按钮逻辑
         // 向后台发送删除请求
-        let delCollection = async () => {
-          const { data: res } = await this.$http({
-            method: "delete",
-            url:
-              "/collection?access_token=" +
-              window.sessionStorage.getItem("token"),
-            data: {
-              user_id: Number(window.sessionStorage.getItem("id")),
-              book_id: row.book_id,
-            },
+        const { data: res } = await this.$http({
+          method: "delete",
+          url:
+            "/collection?access_token=" +
+            this.$store.getters.getToken,
+          data: {
+            user_id: Number(this.$store.userinfo.user_id),
+            book_id: row.book_id,
+          },
+        });
+        if (res.code === 200) {
+          // 删除页面上表单
+          this.tableData.splice(index, 1);
+          // 删除成功提示
+          this.$message({
+            type: "success",
+            message: "已不再收藏该书籍!",
           });
-          if (res.code === 200) {
-            // 删除页面上表单
-            this.tableData.splice(index, 1);
-            // 删除成功提示
-            this.$message({
-              type: "success",
-              message: "已不再收藏该书籍!",
-            });
-          } else {
-            // 删除失败提示
-            this.$message({
-              type: "error",
-              message: res.data,
-            });
-          }
-        };
-        delCollection();
+        } else {
+          // 删除失败提示
+          this.$message({
+            type: "error",
+            message: res.data,
+          });
+        }
       });
     },
   },

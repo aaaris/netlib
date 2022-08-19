@@ -239,9 +239,9 @@ export default {
     let getUser = async () => {
       const { data: res } = await this.$http.get(
         "/user/" +
-          window.sessionStorage.getItem("id") +
+          this.$store.userinfo.user_id +
           "?access_token=" +
-          window.sessionStorage.getItem("token")
+          this.$store.getters.getToken
       );
       this.user = res.data;
       // console.log(this.user)
@@ -251,9 +251,9 @@ export default {
     let getCollections = async () => {
       const { data: res } = await this.$http.get(
         "/collection/" +
-          window.sessionStorage.getItem("id") +
+          this.$store.userinfo.user_id +
           "?access_token=" +
-          window.sessionStorage.getItem("token")
+          this.$store.getters.getToken
       );
       this.tableData = res.data;
     };
@@ -320,7 +320,7 @@ export default {
             method: "delete",
             url:
               "/collection?access_token=" +
-              window.sessionStorage.getItem("token"),
+              this.$store.getters.getToken,
             data: {
               user_id: this.user.user_id,
               book_id: row.book_id,

@@ -2,9 +2,7 @@
   <div class="login_container">
     <!-- 登录盒子 -->
     <div class="login_box">
-      <div class="logo_name">
-        <img class="logo_img" src="../../../public/logo.png" alt="" />
-      </div>
+      <img class="logo_img" src="../../../public/logo.png" alt="" />
       <!-- 登录表单区域 -->
       <el-form
         ref="loginFormRef"
@@ -31,9 +29,9 @@
           >
           </el-input>
         </el-form-item>
-        <a class="a_register" href="/regist">没有账号？点击注册</a>
         <!-- 按钮 -->
         <el-form-item class="btns">
+          <a class="a_register" href="/regist">没有账号？点击注册</a>
           <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
@@ -91,13 +89,18 @@ export default {
         });
         if (res.code != 200)
           return this.$message.error("登录失败! " + res.data);
+        //将登录成功之后的token，保存到客户端的sessionStorage中
+        this.$store.commit("setToken", res.data.access_token);
         this.$message.success({
           message: "登录成功",
         });
-        //将登录成功之后的token，保存到客户端的sessionStorage中
-        window.sessionStorage.setItem("token", res.data.access_token);
-        window.sessionStorage.setItem("id", this.loginForm.userId);
-        this.$store.commit("setToken", res.data.access_token);
+        const { data: res2 } = await this.$http.get(
+          "/user/" +
+            this.loginForm.userId +
+            "?access_token=" +
+            res.data.access_token
+        );
+        localStorage.setItem("userinfo", JSON.stringify(res2.data));
         // 跳转到后台主页
         this.$router.push("/home");
       });
@@ -111,69 +114,64 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 登录body容器
 .login_container {
   height: 100%;
   background-image: url("../../../public/bg.jpg");
   background-size: 100% 100%;
 }
 
+// 登录盒子
 .login_box {
+  text-align: center;
   width: 500px;
   height: 400px;
+  padding-top: 15px;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 3px;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-}
-
-.avatar_box {
-  height: 130px;
-  widows: 130px;
-  border-bottom-right-radius: 50%;
-  padding: 10px;
-  box-shadow: 0 0 10px #2b4b6b;
-  position: absolute;
-  left: 0;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.3);
-
   img {
-    width: 100%;
-    height: 100%;
-    border-bottom-right-radius: 50%;
-  }
-}
-
-.logo_name {
-  font-family: "Courier New", Courier, monospace;
-  font-weight: bold;
-  margin-top: 20px;
-  text-align: center;
-  font-size: 30px;
-
-  .logo_img {
     height: 100px;
   }
-
-  // background-color: #2b4b6b;
 }
 
+// 登录表单区域
 .login_form {
+  position: absolute;
   bottom: 0;
   width: 100%;
   padding: 28px 20px;
   box-sizing: border-box;
 }
 
-.a_register {
-  text-decoration: none;
-  color: blue;
-}
-
+// 按钮区域
 .btns {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
+}
+
+// 注册超链接
+.a_register {
+  margin: auto;
+  text-decoration: none;
+  color: blue;
+  margin-right: 150px;
+}
+
+// 移动端适配
+@media (max-width: 600px) {
+  .login_box {
+    width: 95%;
+  }
+  .login_form {
+    bottom: 30px;
+  }
+  .a_register {
+    margin-right: 20px;
+    font-size: 16px;
+  }
 }
 </style>

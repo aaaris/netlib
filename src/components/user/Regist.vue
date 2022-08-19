@@ -1,10 +1,7 @@
 <template>
   <div class="register_container">
-    <div class="register_box"> 
-      <!-- logo名字 -->
-      <div class="logo_name">
-        <img src="../../../public/logo.png" alt="" /> 
-      </div>
+    <div class="register_box">
+      <img src="../../../public/logo.png" alt="" />
       <!-- 注册表单区域 -->
       <el-form
         ref="registerFormRef"
@@ -144,6 +141,8 @@ export default {
 }
 
 .register_box {
+  text-align: center;
+  padding-top: 15px;
   width: 500px;
   height: 400px;
   background-color: rgba(255, 255, 255, 0.95);
@@ -153,38 +152,19 @@ export default {
   top: 50%;
   line-height: 30px;
   transform: translate(-50%, -50%);
-}
-
-.avatar_box {
-  height: 130px;
-  widows: 130px;
-  border-bottom-right-radius: 50%;
-  padding: 10px;
-  box-shadow: 0 0 10px #2b4b6b;
-  position: absolute;
-  left: 0;
-  transform: translate(-50%, -50%);
-  background-color: rgba(255, 255, 255, 0.3);
-
-  img {
-    width: 100%;
-    height: 100%;
-    border-bottom-right-radius: 50%;
-  }
-}
-
-.logo_name {
-  font-size: 30px;
-  font-family: "Courier New", Courier, monospace;
-  font-weight: bold;
-  text-align: center;
-  margin: 5px;
   img {
     height: 100px;
   }
 }
 
+@media (max-width: 600px) {
+  .register_box {  
+    width: 95%; 
+  }
+}
+
 .register_form {
+  position: absolute;
   bottom: 0;
   width: 100%;
   padding: 28px 20px;

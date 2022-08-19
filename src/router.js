@@ -4,7 +4,6 @@ import Login from "./components/user/Login.vue";
 import Regist from "./components/user/Regist.vue";
 import Home from "./components/Home.vue";
 import Index from "./components/index/Index.vue";
-import axios from "axios";
 import store from "./store/store";
 
 Vue.use(Router);
@@ -16,6 +15,7 @@ const routes = [
     // redirect: "/index/profile",
     // 路由嵌套
     children: [],
+    meta: { requireAuth: true, roles: ["admin", "user"] },
   },
   {
     path: "/",
@@ -24,14 +24,17 @@ const routes = [
   {
     path: "/login",
     component: Login,
+    meta: { requireAuth: false, roles: ["admin", "user"] },
   },
   {
     path: "/regist",
     component: Regist,
+    meta: { requireAuth: false, roles: ["admin", "user"] },
   },
   {
     path: "/home",
     component: Home,
+    meta: { requireAuth: false, roles: ["admin", "user"] },
   },
 ];
 
@@ -113,7 +116,7 @@ router.beforeEach((to, from, next) => {
     let userState = store.state.userState;
     // 如果用户为管理员则添加数据后台
     if (userState == 1) {
-      menu_data.splice(1, 1, {
+      menu_data.splice(1, 0, {
         name: "DATA&TABLE",
         icon: "el-icon-s-data",
         child: [
@@ -138,7 +141,29 @@ router.beforeEach((to, from, next) => {
     // 设置已经加载过的标记
     store.commit("setLoadRoute", true);
   }
-  next();
+  if (to.matched.some((m) => m.meta.requireAuth)) {
+    // 需要登录
+    if (window.localStorage.token && window.localStorage.isLogin === "1") {
+      next();
+    } else if (to.path !== "/login") {
+      let token = window.localStorage.token;
+      if (token === "null" || token === "" || token === undefined) {
+        next({ path: "/login" });
+        Vue.prototype.$message({
+          message: "检测到您还未登录,请登录后操作！",
+          type: "error",
+          duration: 1500,
+        });
+      }else {
+        
+      }
+    } else {
+      next();
+    }
+  } else {
+    // 不需要登陆
+    next();
+  } 
 });
 
 export default router;

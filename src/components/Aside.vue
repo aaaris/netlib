@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div>
     <el-menu
       background-color="#545c64"
       text-color="#ffffff"
@@ -51,5 +51,6 @@ export default {
 <style lang="less" scoped>
 .el-menu-vertical-demo {
   height: 100%;
+  width: 300px;
 }
 </style>
