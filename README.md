@@ -3,7 +3,7 @@
 
 ### logo
 
-![image](src/assets/logo.png)
+![image](src/public/logo.png)
 
 ### introduction
 
