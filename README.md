@@ -4,7 +4,7 @@
 
 ### current
 
-> 存在问题：重构路由后，登录系统亟待重设
+> v1.1 22/8/25 更新homePage，bookPage。在bookPage新增评论功能，支持评论模块的查看，添加，删除用户个人评论。
 
 > v1.0.2 22/8/18 修改基本页面的样式，以适配移动端
 
@@ -18,7 +18,17 @@
 
 > a website for user to download and share books easily on the Internet
 
-> 一个用于练手的图书资源网站，基于Vue和Gin打造的前后端分离项目
+一个用于练手的图书资源网站，基于Vue和Gin打造的**前后端分离**项目，拥有以下功能：
+
+- 用户登录注册登出
+
+- 用户上传、下载书本
+
+- 用户收藏书本 
+
+- 用户评论书本
+  
+- 管理员用户对书本和用户 curd
 
 ### views
 
@@ -30,9 +40,7 @@
 
 ### technology stack
 
-- Vue-cli
-
-- Axious
+- Vue-cli 
 
 - Element UI
 
@@ -40,7 +48,7 @@
 
 - Gorm
 
-- Mysql/Redis
+- Mysql&Redis
 
 ### demo for view
 
@@ -71,13 +79,7 @@ npm run serve
 ```bash
 npm run build
 ```
-
-### Lints and fixes files
-
-```bash
-npm run lint
-```
-
+ 
 ## Contributors
 
 [xuedingedejumao](https://github.com/xuedingedejumao)
