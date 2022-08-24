@@ -1,5 +1,6 @@
 import Vue from "vue";
 import {
+  Popconfirm,
   Pagination,
   Dialog,
   Autocomplete,
@@ -41,8 +42,11 @@ import {
   Empty,
   Notification,
   Card,
+  DatePicker,
 } from "element-ui";
 
+Vue.use(Popconfirm);
+Vue.use(DatePicker);
 Vue.use(Pagination);
 Vue.use(Card);
 Vue.use(Empty);

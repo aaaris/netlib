@@ -7,7 +7,7 @@ Vue.use(Vuex);
 // 便于刷新页面后重新从localStorage中获取值
 const state = {
   isLogin: localStorage.getItem("isLogin")
-    ? localStorage.getItem("isLogin")
+    ? 1
     : 0,
   // user
   userinfo: localStorage.getItem("userinfo")
