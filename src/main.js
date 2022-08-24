@@ -15,7 +15,7 @@ Vue.prototype.$http.defaults.baseURL = "http://localhost:8081/api/v1";
 // 服务器
 // Vue.prototype.$http.defaults.baseURL = "http://122.9.215.185:8081/api/v1";
 
-  
+
 
 Vue.config.productionTip = false;
 

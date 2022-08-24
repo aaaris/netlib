@@ -11,7 +11,7 @@
             <!-- <i class="el-icon-user">book.book_upload_user</i> -->
           </div>
         </div>
-        <div style="display: flex; align-items: center">
+        <div class="book_info">
           <img
             width="150px"
             :src="
@@ -20,13 +20,14 @@
             "
             alt="书本图片"
           />
-          <div style="margin-left: 50px">
-            <span>书籍名称：《{{ book.book_name }}》</span> <br />
-            <span>所属分类：{{ book.class_name }}</span
+          <div class="book_info_text">
+            书籍名称：<span style="color: #333">《{{ book.book_name }}》</span>
+            <br />
+            所属分类： <span style="color: #333">{{ book.class_name }}</span
             ><br />
-            <span>书籍作者：{{ book.book_author }}</span
+            书籍作者：<span style="color: #333">{{ book.book_author }}</span
             ><br />
-            <span>书籍出版社：{{ book.book_addr }}</span
+            书籍出版社： <span style="color: #333">{{ book.book_addr }}</span
             ><br />
             <el-rate
               v-model="book_rate"
@@ -87,10 +88,35 @@
         <div slot="header" class="clearfix">
           <span class="header_name">评论列表</span>
         </div>
-        <div class="text item">
-          <p>
-            {{ book.info }}
-          </p>
+        <div class="comment-item" v-if="this.comments.length === 0">
+          😊 暂无评论，快来抢沙发吧~
+        </div>
+        <div class="comment-item" v-for="comment in this.comments">
+          <div style="padding-bottom: 10px; display: flex; align-items: center">
+            <img
+              style="border-radius: 50%; margin-right: 10px"
+              :src="`http://localhost:8081` + comment.user_img_url"
+              height="22px"
+              alt=""
+            />
+            <span style="color: #4e86bd">{{ comment.user_name }}</span>
+            <span style="color: #777; margin-left: 20px; margin-right: 20px">
+              {{ comment.create_time }}
+            </span>
+            <el-popconfirm
+              title="这是一段内容确定删除吗？"
+              @confirm="delComment(comment.comment_id)"
+            >
+              <el-button
+                slot="reference"
+                type="text"
+                style="color: #777"
+                v-if="comment.user_id === $store.getters.getUserId"
+                icon="el-icon-delete"
+              ></el-button>
+            </el-popconfirm>
+          </div>
+          <div>{{ comment.comment_text }}</div>
         </div>
       </el-card>
       <!-- 发表评论 -->
@@ -99,9 +125,22 @@
           <span class="header_name">发表评论</span>
         </div>
         <div class="text item">
-          <p>
-            {{ book.info }}
-          </p>
+          <el-input
+            type="textarea"
+            :autosize="{ minRows: 4, maxRows: 5 }"
+            placeholder="请输入内容"
+            v-model="input_comment"
+            maxlength="50"
+            show-word-limit
+          >
+          </el-input>
+          <el-button
+            style="width: 150px; margin-top: 20px"
+            icon="el-icon-s-comment"
+            type="primary"
+            @click="sendComment"
+            >发布</el-button
+          >
         </div>
       </el-card>
     </div>
@@ -118,14 +157,17 @@ export default {
       "/book/" + this.$route.params.book_id
     );
     this.book = res.data;
-    console.log(this.book);
+    // console.log(this.book);
     // 从后端api初始化books data
     const { data: res2 } = await this.$http.get("/book" + `?limit=10`);
     this.recommendBooks = res2.data;
-    console.log(this.recommendBooks);
+    // console.log(this.recommendBooks);
+    // 从后端api初始化comment data
+    this.getComments();
   },
   data() {
     return {
+      // post页图书
       book: {
         book_addr: "",
         book_author: "",
@@ -138,7 +180,12 @@ export default {
         book_score: "",
         class_name: "",
       },
+      // 推荐图书集
       recommendBooks: [],
+      // 评论集合
+      comments: [],
+      // 输入评论
+      input_comment: "",
     };
   },
   computed: {
@@ -147,27 +194,100 @@ export default {
       get() {
         return this.book.book_score * 0.5;
       },
+      set(newValue) {},
     },
   },
   methods: {
     // 下载图书
     downloadBook() {
       // 检查用户是否登陆
-      if (!this.$store.isLogin) {
+      if (!this.$store.state.isLogin) {
         this.$router.push("/login");
-        return this.message.error("请先登陆");
+        return this.$message.error("请先登陆");
       }
+      alert("只有图片捏！");
     },
     // 收藏图书
-    collectBook() {
-      if (!this.$store.isLogin) {
+    async collectBook() {
+      if (!this.$store.state.isLogin) {
         this.$router.push("/login");
-        return this.message.error("请先登陆");
+        return this.$message.error("请先登陆");
+      }
+      const { data: res } = await this.$http({
+        method: "post",
+        url: "/collection?access_token=" + this.$store.getters.getToken,
+        data: {
+          user_id: this.$store.getters.getUserId,
+          book_id: this.book.book_id,
+        },
+      });
+      if (res.code == 200) {
+        this.$message.success("收藏成功！");
+      } else {
+        alert(res.data);
+      }
+    },
+    // 获取评论
+    async getComments() {
+      const { data: res3 } = await this.$http.get(
+        "/comment/" + this.book.book_id
+      );
+      this.comments = res3.data;
+      console.log(this.comments);
+    },
+    // 发布评论
+    async sendComment() {
+      // 验证登录
+      if (!this.$store.state.isLogin) {
+        this.$router.push("/login");
+        return this.$message.error("请先登陆");
+      }
+      // 评论语句不为空
+      if (this.input_comment === "") {
+        alert("评论不能为空");
+        return;
+      }
+      // 发送请求
+      const { data: res } = await this.$http({
+        method: "post",
+        url: "/comment?access_token=" + this.$store.getters.getToken,
+        data: {
+          user_id: this.$store.getters.getUserId,
+          book_id: this.book.book_id,
+          comment_text: this.input_comment,
+        },
+      });
+      // console.log(res);
+      if (res.code === 200) {
+        this.input_comment = "";
+        this.$message.success("评论发表成功！");
+        this.getComments();
+      } else {
+        this.$message.error(res.data);
+      }
+    },
+    // 删除自己的评论
+    async delComment(comment_id) {
+      // 发送请求
+      const { data: res } = await this.$http({
+        method: "delete",
+        url:
+          "/comment/" +
+          comment_id +
+          "?access_token=" +
+          this.$store.getters.getToken,
+      });
+      if (res.code === 200) {
+        this.$message.success("删除成功！");
+        this.getComments();
+      } else {
+        this.$message.error(res.data);
       }
     },
   },
 };
 </script>
+
 <style lang="less" scoped>
 // 内容容器
 .main-container {
@@ -201,7 +321,7 @@ export default {
   clear: both;
 }
 .clearfix {
-  color: #777;
+  color: #666;
   span {
     font-size: 20px;
   }
@@ -212,12 +332,35 @@ export default {
   margin-top: 30px;
 }
 
+.book_info {
+  display: flex;
+  align-items: center;
+}
+
+.book_info_text {
+  margin-left: 50px;
+  color: #888;
+}
+
+.comment-item {
+  margin-bottom: 30px;
+}
+.comment-item::after {
+  margin-bottom: 0px;
+}
+
 // 移动端适配
 @media (max-width: 600px) {
   .main-container {
     margin: 30px auto;
     width: 90%;
     padding: 10px;
+  }
+  .book_info {
+    flex-direction: column;
+  }
+  .book_info_text {
+    margin-top: 10px;
   }
 }
 </style>

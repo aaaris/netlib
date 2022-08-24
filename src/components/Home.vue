@@ -96,29 +96,7 @@ export default {
       console.log(res.data);
       // 调用callback返回建议的数据
       cb(res.data);
-    },
-
-    // 收藏书本按钮事件
-    async takeBookItem(index, row) {
-      // 检验用户登录
-      if (this.$store.getters.getToken === null) {
-        return this.$message.error("请先登录！");
-      }
-      // 请后后台，收藏书籍
-      const { data: res } = await this.$http({
-        method: "post",
-        url: "/collection?access_token=" + this.$store.getters.getToken,
-        data: {
-          user_id: Number(this.$store.state.userinfo.user_id),
-          book_id: row.book_id,
-        },
-      });
-      if (res.code === 200) {
-        this.$message.success("收藏成功");
-      } else {
-        this.$message("已收藏");
-      }
-    },
+    }, 
     // 寻找书本
     async searchBookItem() {
       if (this.select === "") {
