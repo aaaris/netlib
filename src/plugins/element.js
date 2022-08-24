@@ -41,8 +41,10 @@ import {
   Empty,
   Notification,
   Card,
+  DatePicker,
 } from "element-ui";
 
+Vue.use(DatePicker);
 Vue.use(Pagination);
 Vue.use(Card);
 Vue.use(Empty);

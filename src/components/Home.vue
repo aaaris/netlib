@@ -33,8 +33,20 @@
           <h1>&nbsp;&nbsp;&nbsp;最受欢迎的</h1>
           <el-divider></el-divider>
         </div>
-        <!-- 书本信息表格 -->
         <!-- 信息部分 -->
+        <div style="text-align: center">
+          <div class="book_item" v-for="b in books">
+            <a :href="`/book/` + b.book_id">
+              <img
+                :src="
+                  `http://localhost:8081/static/img/books/` +
+                  b.book_img_url.split('/').at(-1)
+                "
+                alt="书本图片"
+              />
+            </a>
+          </div>
+        </div>
       </el-main>
     </el-container>
     <Footer></Footer>
@@ -52,16 +64,15 @@ export default {
       suggestionArray: [],
       searchText: "",
       // 查询排行榜表单数据
-      tableData: [],
+      books: [],
     };
   },
-  // async created() {
-  //   // 从后端api初始化tableData
-  //   const { data: res } = await this.$http.get("/book");
-  //   this.tableData = res.data;
-  //     this.$store.state.userinfo = res.data;
-  //   }
-  // },
+  async created() {
+    // 从后端api初始化books data
+    const { data: res } = await this.$http.get("/book");
+    this.books = res.data;
+    this.$store.state.userinfo = res.data;
+  },
   methods: {
     // 选择搜索建议
     handleSelect(item) {
@@ -132,11 +143,10 @@ export default {
 
 <style lang="less" scoped>
 // 内容容器
-
 .main-container {
   line-height: 30px;
   width: 75%;
-  padding: 20px;
+  padding: 30px;
   margin: 50px auto;
   background-color: white;
   box-shadow: 0 4px 14px 0 rgb(0 0 0 / 5%);
@@ -150,6 +160,20 @@ export default {
   img {
     width: 300px;
     height: 100px;
+  }
+}
+
+// 书本样式
+.book_item {
+  display: inline-block;
+  width: 162px;
+  height: 240px;
+  padding: 8px;
+  // box-sizing: border-box;
+  border: 5px double wheat;
+  img {
+    height: 100%;
+    width: 100%;
   }
 }
 

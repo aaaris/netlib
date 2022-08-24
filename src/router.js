@@ -5,6 +5,7 @@ import Regist from "./components/user/Regist.vue";
 import Home from "./components/Home.vue";
 import Index from "./components/index/Index.vue";
 import store from "./store/store";
+import Book from "./components/books/Book.vue";
 
 Vue.use(Router);
 
@@ -34,6 +35,11 @@ const routes = [
   {
     path: "/home",
     component: Home,
+    meta: { requireAuth: false, roles: ["admin", "user"] },
+  },
+  {
+    path: "/book/:book_id",
+    component: Book,
     meta: { requireAuth: false, roles: ["admin", "user"] },
   },
 ];
