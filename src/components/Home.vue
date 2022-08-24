@@ -39,7 +39,7 @@
             <a :href="`/book/` + b.book_id">
               <img
                 :src="
-                  `http://localhost:8081/static/img/books/` +
+                  `http://122.9.215.185/static/img/books/` +
                   b.book_img_url.split('/').at(-1)
                 "
                 alt="书本图片"

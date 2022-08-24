@@ -15,7 +15,7 @@
           <img
             width="150px"
             :src="
-              `http://localhost:8081/static/img/books/` +
+              `http://122.9.215.185/static/img/books/` +
               this.book.book_img_url.split('/').at(-1)
             "
             alt="书本图片"
@@ -74,7 +74,7 @@
             <a :href="`/book/` + rb.book_id">
               <img
                 :src="
-                  `http://localhost:8081/static/img/books/` +
+                  `http://122.9.215.185/static/img/books/` +
                   rb.book_img_url.split('/').at(-1)
                 "
                 alt="书本图片"
@@ -95,7 +95,7 @@
           <div style="padding-bottom: 10px; display: flex; align-items: center">
             <img
               style="border-radius: 50%; margin-right: 10px"
-              :src="`http://localhost:8081` + comment.user_img_url"
+              :src="`http://122.9.215.185` + comment.user_img_url"
               height="22px"
               alt=""
             />
