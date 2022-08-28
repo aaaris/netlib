@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunknet_lib"]=self["webpackChunknet_lib"]||[]).push([[971],{11971:(e,t,n)=>{n.r(t),n.d(t,{default:()=>i});var l=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div",[n("h1",[e._v("联系我们")]),n("el-empty",{attrs:{description:"页面制作中"}})],1)},s=[];const c={},r=c;var u=n(1001),a=(0,u.Z)(r,l,s,!1,null,"63e8cdce",null);const i=a.exports}}]);
+//# sourceMappingURL=971.50105ede.js.map

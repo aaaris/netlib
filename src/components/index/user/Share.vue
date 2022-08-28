@@ -51,7 +51,7 @@
         <el-upload
           class="upload-demo"
           drag
-          :action="this.$http.defaults.baseURL + `/img/test`"
+          :action="this.$http.defaults.baseURL + `/api/v1/img/book`"
           multiple
         >
           <i class="el-icon-upload"></i>

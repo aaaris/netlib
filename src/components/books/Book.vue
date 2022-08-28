@@ -15,7 +15,7 @@
           <img
             width="150px"
             :src="
-              `http://localhost:8081/static/img/books/` +
+              `http://122.9.215.185:8081/static/img/books/` +
               this.book.book_img_url.split('/').at(-1)
             "
             alt="书本图片"
@@ -74,7 +74,7 @@
             <a :href="`/book/` + rb.book_id">
               <img
                 :src="
-                  `http://localhost:8081/static/img/books/` +
+                  `http://122.9.215.185:8081/static/img/books/` +
                   rb.book_img_url.split('/').at(-1)
                 "
                 alt="书本图片"
@@ -95,7 +95,7 @@
           <div style="padding-bottom: 10px; display: flex; align-items: center">
             <img
               style="border-radius: 50%; margin-right: 10px"
-              :src="`http://localhost:8081` + comment.user_img_url"
+              :src="`http://122.9.215.185:8081` + comment.user_img_url"
               height="22px"
               alt=""
             />
@@ -111,7 +111,10 @@
                 slot="reference"
                 type="text"
                 style="color: #777"
-                v-if="comment.user_id === $store.getters.getUserId"
+                v-if="
+                  $store.state.isLogin &&
+                  comment.user_id === $store.getters.getUserId
+                "
                 icon="el-icon-delete"
               ></el-button>
             </el-popconfirm>
@@ -163,7 +166,11 @@ export default {
     this.recommendBooks = res2.data;
     // console.log(this.recommendBooks);
     // 从后端api初始化comment data
-    this.getComments();
+    const { data: res3 } = await this.$http.get(
+      "/comment/" + this.book.book_id
+    );
+    this.comments = res3.data;
+    console.log(this.comments);
   },
   data() {
     return {
@@ -260,8 +267,8 @@ export default {
       // console.log(res);
       if (res.code === 200) {
         this.input_comment = "";
-        this.$message.success("评论发表成功！");
         this.getComments();
+        this.$message.success("评论发表成功！");
       } else {
         this.$message.error(res.data);
       }
@@ -278,8 +285,8 @@ export default {
           this.$store.getters.getToken,
       });
       if (res.code === 200) {
-        this.$message.success("删除成功！");
         this.getComments();
+        this.$message.success("删除成功！");
       } else {
         this.$message.error(res.data);
       }
