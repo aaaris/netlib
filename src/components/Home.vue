@@ -39,7 +39,7 @@
             <a :href="`/book/` + b.book_id">
               <img
                 :src="
-                  `http://122.9.215.185/static/img/books/` +
+                  `http://122.9.215.185:8081/static/img/books/` +
                   b.book_img_url.split('/').at(-1)
                 "
                 alt="书本图片"
@@ -70,8 +70,7 @@ export default {
   async created() {
     // 从后端api初始化books data
     const { data: res } = await this.$http.get("/book");
-    this.books = res.data;
-    this.$store.state.userinfo = res.data;
+    this.books = res.data; 
   },
   methods: {
     // 选择搜索建议
@@ -93,10 +92,10 @@ export default {
           "&queryVal=" +
           queryString,
       });
-      console.log(res.data);
+      // console.log(res.data);
       // 调用callback返回建议的数据
       cb(res.data);
-    }, 
+    },
     // 寻找书本
     async searchBookItem() {
       if (this.select === "") {

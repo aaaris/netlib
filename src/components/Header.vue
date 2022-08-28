@@ -8,13 +8,15 @@
         <el-col :span="12" style="text-align: right">
           <a href="/index" class="userlink">
             <i class="el-icon-user"></i>&nbsp;{{
-              this.isLogin ? this.$store.state.userinfo.user_name : "游客"
+              this.$store.state.isLogin
+                ? this.$store.state.userinfo.user_name
+                : "游客"
             }}
           </a>
           <a
             href="javascript:;"
             class="userlink"
-            v-if="this.isLogin == true"
+            v-if="this.$store.state.isLogin"
             @click="logout"
             >退出</a
           >
@@ -27,13 +29,6 @@
 export default {
   data() {
     return {};
-  },
-  computed: {
-    isLogin: {
-      get() {
-        return this.$store.state.isLogin;
-      },
-    },
   },
   methods: {
     logout() {
